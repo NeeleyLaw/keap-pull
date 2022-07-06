@@ -69,21 +69,22 @@ async function mainloop() {
     console.log("Starting at email id: " + (newestFetchedEmailId + 1));
 
     console.log("Running...");
-    for (let i = newestFetchedEmailId + 1; i < lastEmailInJuneID; i++) {
-        if (!running) return;
-        let thisEmail = await getKeapEmail(i);
-        if(thisEmail && thisEmail != null && !thisEmail.message) {
-            addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date);
-        }
-        await timer(40);
-        //await timer(4000);
-    }
+    var i = newestFetchedEmailId + 1
+    var mainInterval = setInterval(() => {
+        if (!running) clearInterval(mainInterval);
+        getKeapEmail(i).then((thisEmail) => {
+            if (thisEmail && thisEmail != null && !thisEmail.message) {
+                addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date);
+            }
+        });
+        i++;
+    }, 40)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 async function getKeapEmail(id) {
-    if(!keapSession.accessToken) {
+    if (!keapSession.accessToken) {
         return;
     }
     var res = await got.get(`https://api.infusionsoft.com/crm/rest/v1/emails/${id}`, {
@@ -101,14 +102,14 @@ async function getKeapEmail(id) {
 }
 
 async function addEmailToDB(email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date) {
-    if(subject != null) subject = '"' + subject.replaceAll("\"", "") + '"';
-    if(plain_content != null) plain_content = '"' + plain_content.replaceAll("\"", "") + '"';
-    if(html_content != null) html_content = '"' + html_content.replaceAll("\"", "") + '"';
-    if(sent_to_address != null) sent_to_address = '"' + sent_to_address.replaceAll("\"", "") + '"';
-    if(sent_from_address != null) sent_from_address = '"' + sent_from_address.replaceAll("\"", "") + '"';
-    if(headers != null) headers = '"' + headers.replaceAll("\"", "") + '"';
-    if(sent_date != null) sent_date = '"' + sent_date.replaceAll("\"", "") + '"';
-    if(received_date != null) received_date = '"' + received_date.replaceAll("\"", "") + '"';
+    if (subject != null) subject = '"' + subject.replaceAll("\"", "") + '"';
+    if (plain_content != null) plain_content = '"' + plain_content.replaceAll("\"", "") + '"';
+    if (html_content != null) html_content = '"' + html_content.replaceAll("\"", "") + '"';
+    if (sent_to_address != null) sent_to_address = '"' + sent_to_address.replaceAll("\"", "") + '"';
+    if (sent_from_address != null) sent_from_address = '"' + sent_from_address.replaceAll("\"", "") + '"';
+    if (headers != null) headers = '"' + headers.replaceAll("\"", "") + '"';
+    if (sent_date != null) sent_date = '"' + sent_date.replaceAll("\"", "") + '"';
+    if (received_date != null) received_date = '"' + received_date.replaceAll("\"", "") + '"';
 
     con.query(`INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date})`, function (err, result) {
         if (err) throw err;
