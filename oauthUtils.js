@@ -1,7 +1,7 @@
 // Utilities to help with OAuth in keap
 const got = require("got");
 
-var devMode = process.env.KEAP_CLIENT_ID == 1;
+var devMode = process.env.DEV == 1;
 
 var keapClientID = process.env.KEAP_CLIENT_ID;
 var keapClientSecret = process.env.KEAP_CLIENT_SECRET;

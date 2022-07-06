@@ -1,9 +1,8 @@
 const express = require('express');
 const mysql = require('mysql');
+const got = require("got");
 const app = express();
 const port = process.env.PORT || 3000;
-
-const got = require("got");
 
 const { refreshKeap, initKeap, keapSession, serverUrl, keapClientID } = require('./oauthUtils.js');
 
