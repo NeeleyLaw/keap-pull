@@ -37,6 +37,7 @@ app.get('/login', (req, res) => {
 
 app.get("/stop", (req, res) => {
     running = false;
+    console.log("TERMINATED")
     res.send("Stopping");
 })
 
@@ -66,13 +67,16 @@ async function mainloop() {
     await timer(2000);
 
     console.log("Starting at email id: " + (newestFetchedEmailId + 1));
+
+    console.log("Running...");
     for (let i = newestFetchedEmailId + 1; i < lastEmailInJuneID; i++) {
+        if (!running) return;
         let thisEmail = await getKeapEmail(i);
         if(thisEmail && thisEmail != null && !thisEmail.message) {
             addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date);
         }
-        //await timer(40);
-        await timer(4000);
+        await timer(40);
+        //await timer(4000);
     }
 }
 
