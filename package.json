@@ -1,0 +1,22 @@
+{
+  "name": "keap-pull",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aneeley05/keap-pull.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aneeley05/keap-pull/issues"
+  },
+  "homepage": "https://github.com/aneeley05/keap-pull#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
