@@ -78,7 +78,7 @@ async function mainloop() {
             }
         });
         i++;
-    }, 40)
+    }, 50)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
