@@ -73,12 +73,13 @@ async function mainloop() {
     var mainInterval = setInterval(() => {
         if (!running) clearInterval(mainInterval);
         getKeapEmail(i).then((thisEmail) => {
+
             if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
                 addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date);
             }
         });
         i++;
-    }, 50)
+    }, 600)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
