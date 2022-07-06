@@ -78,7 +78,8 @@ async function mainloop() {
                 addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date);
             }
         });
-        i++;
+        if(i % 2 == 1) i+=1;
+        if(i % 2 == 0) i+=2;
     }, 600)
 }
 
