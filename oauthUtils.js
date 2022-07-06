@@ -1,11 +1,13 @@
 // Utilities to help with OAuth in keap
 const got = require("got");
 
+var devMode = process.env.KEAP_CLIENT_ID == 1;
+
 var keapClientID = process.env.KEAP_CLIENT_ID;
 var keapClientSecret = process.env.KEAP_CLIENT_SECRET;
 var keapSession = {};
 
-var serverUrl = "https://" + process.env.CODESPACE_NAME + "-3000.githubpreview.dev";
+var serverUrl = devMode ? "https://" + process.env.CODESPACE_NAME + "-3000.githubpreview.dev" : "https://keap-pull.herokuapp.com";
 
 async function initKeap(code) {
     var res = await got.post("https://api.infusionsoft.com/token", {
