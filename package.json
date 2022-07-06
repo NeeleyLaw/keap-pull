@@ -19,6 +19,7 @@
   "homepage": "https://github.com/aneeley05/keap-pull#readme",
   "dependencies": {
     "express": "^4.18.1",
+    "got": "^12.1.0",
     "mysql": "^2.18.1"
   }
 }
