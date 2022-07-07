@@ -66,7 +66,7 @@ async function mainloop() {
 
     await timer(2000);
 
-    console.log("Starting at email id: " + (newestFetchedEmailId + 1));
+    console.log("Starting at email id: " + (newestFetchedEmailId + 2));
 
     console.log("Running...");
     var i = newestFetchedEmailId + 2
