@@ -69,7 +69,7 @@ async function mainloop() {
     console.log("Starting at email id: " + (newestFetchedEmailId + 1));
 
     console.log("Running...");
-    var i = newestFetchedEmailId + 1
+    var i = newestFetchedEmailId + 2
     var mainInterval = setInterval(() => {
         if (!running || i > lastEmailInJuneID) clearInterval(mainInterval);
         getKeapEmail(i).then((thisEmail) => {
