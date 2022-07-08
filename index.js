@@ -70,16 +70,15 @@ async function mainloop() {
 
     console.log("Running...");
     var i = newestFetchedEmailId + 2
-    var mainInterval = setInterval(async () => {
+    var mainInterval = setInterval(() => {
         if (!running || i > lastEmailInJuneID) clearInterval(mainInterval);
-        var thisEmail = await getKeapEmail(i)
-
-        if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
-            addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date, thisEmail.sent_to_cc_addresses);
-        } else if (thisEmail.message) {
-            i -= 1;
-        }
-
+        getKeapEmail(i).then((thisEmail) => {
+            if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
+                addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date, thisEmail.sent_to_cc_addresses);
+            } else if (thisEmail.message) {
+                i -= 1;
+            }
+        })
         i += 2;
     }, 600)
 }
