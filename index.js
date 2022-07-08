@@ -70,7 +70,7 @@ async function mainloop() {
 
     console.log("Running...");
     var i = newestFetchedEmailId + 2
-    var mainInterval = setInterval(() => {
+    var mainInterval = setInterval(async () => {
         if (!running || i > lastEmailInJuneID) clearInterval(mainInterval);
         var thisEmail = await getKeapEmail(i)
 
