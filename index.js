@@ -72,14 +72,15 @@ async function mainloop() {
     var i = newestFetchedEmailId + 2
     var mainInterval = setInterval(() => {
         if (!running || i > lastEmailInJuneID) clearInterval(mainInterval);
-        getKeapEmail(i).then((thisEmail) => {
-            if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
-                addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date);
-            } else if(thisEmail.message) {
-                i-=3;
-            }
-        });
-        i+=2;
+        var thisEmail = await getKeapEmail(i)
+
+        if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
+            addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date, thisEmail.sent_to_cc_addresses);
+        } else if (thisEmail.message) {
+            i -= 1;
+        }
+
+        i += 2;
     }, 600)
 }
 
@@ -103,17 +104,18 @@ async function getKeapEmail(id) {
     return res.body;
 }
 
-async function addEmailToDB(email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date) {
+async function addEmailToDB(email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_to_cc_addresses, sent_date, received_date) {
     if (subject != null) subject = '"' + subject.replaceAll("\"", "") + '"';
     if (plain_content != null) plain_content = '"' + plain_content.replaceAll("\"", "") + '"';
     if (html_content != null) html_content = '"' + html_content.replaceAll("\"", "") + '"';
     if (sent_to_address != null) sent_to_address = '"' + sent_to_address.replaceAll("\"", "") + '"';
     if (sent_from_address != null) sent_from_address = '"' + sent_from_address.replaceAll("\"", "") + '"';
+    if (sent_to_cc_addresses != null) sent_to_cc_addresses = '"' + sent_to_cc_addresses.replaceAll("\"", "") + '"';
     if (headers != null) headers = '"' + headers.replaceAll("\"", "") + '"';
     if (sent_date != null) sent_date = '"' + sent_date.replaceAll("\"", "") + '"';
     if (received_date != null) received_date = '"' + received_date.replaceAll("\"", "") + '"';
 
-    con.query(`INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date})`, function (err, result) {
+    con.query(`INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date, sent_to_cc_addresses) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date}, ${sent_to_cc_addresses})`, function (err, result) {
         if (err) console.log(err);
     });
 }
