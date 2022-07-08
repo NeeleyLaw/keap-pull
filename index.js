@@ -114,6 +114,6 @@ async function addEmailToDB(email_id, contact_id, subject, headers, plain_conten
     if (received_date != null) received_date = '"' + received_date.replaceAll("\"", "") + '"';
 
     con.query(`INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date})`, function (err, result) {
-        if (err) throw err;
+        if (err) console.log(err);
     });
 }
