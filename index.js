@@ -8,6 +8,8 @@ const { refreshKeap, initKeap, keapSession, serverUrl, keapClientID } = require(
 
 var running = true;
 
+var pulledEmails = 0;
+
 // Last email in june has id 3354568
 var lastEmailInJuneID = 3354568;
 
@@ -19,10 +21,11 @@ const con = mysql.createConnection({
 });
 
 app.get("/", (req, res) => {
-    con.query("SELECT COUNT(*) FROM emails", function (err, result) {
-        if (err) res.send(err);
-        res.send("emails pulled: " + result[0]['COUNT(*)']);
-    });
+    if(pulledEmails != 0) {
+        res.send("Emails pulled: " + pulledEmails);
+    } else {
+        res.send("Email count still loading...");
+    }
 });
 
 // Oauth and shit
@@ -74,13 +77,20 @@ async function mainloop() {
         if (!running || i > lastEmailInJuneID) clearInterval(mainInterval);
         getKeapEmail(i).then((thisEmail) => {
             if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
-                addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_date, thisEmail.received_date, thisEmail.sent_to_cc_addresses);
+                addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_to_cc_addresses, thisEmail.sent_date, thisEmail.received_date);
             } else if (thisEmail.message) {
                 i -= 1;
             }
         })
         i += 2;
     }, 600)
+
+    var countInterval = setInterval(() => {
+        con.query("SELECT COUNT(*) FROM emails", function (err, result) {
+            if (err) throw err;
+            pulledEmails = result[0]['COUNT(*)'];
+        });
+    }, 300000)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
