@@ -45,7 +45,7 @@ app.get("/stop", (req, res) => {
 })
 
 con.connect(function (err) {
-    if (err) throw err;
+    if (err) console.log(err);
     console.log("Connected!");
 });
 
@@ -55,17 +55,13 @@ app.listen(port, () => {
 
 async function mainloop() {
     var newestFetchedEmailId = 0;
-    var newestFetchedRowIndex = -1;
+
     con.query(`SELECT max(email_id) FROM emails`, function (err, result) {
         if (err) throw err;
         if (result[0]['max(email_id)'] != null) {
             newestFetchedEmailId = result[0]['max(email_id)'];
         }
     })
-    con.query("SELECT COUNT(*) FROM emails", function (err, result) {
-        if (err) throw err;
-        newestFetchedRowIndex = (result[0]['COUNT(*)'] - 1)
-    });
 
     await timer(2000);
 
@@ -126,10 +122,7 @@ async function addEmailToDB(email_id, contact_id, subject, headers, plain_conten
 
     var query = `INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date, sent_to_cc_addresses) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date}, ${sent_to_cc_addresses})`;
 
-    console.log(query);
-
-    // con.query(query, function (err, result) {
-    //     if (err) console.log(err);
-    // });
-    console.log("Added email id: " + email_id);
+    con.query(query, function (err, result) {
+        if (err) console.log(err);
+    });
 }
