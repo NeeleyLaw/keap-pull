@@ -85,12 +85,12 @@ async function mainloop() {
         i += 2;
     }, 600)
 
-    var countInterval = setInterval(() => {
-        con.query("SELECT COUNT(*) FROM emails", function (err, result) {
-            if (err) throw err;
-            pulledEmails = result[0]['COUNT(*)'];
-        });
-    }, 300000)
+    // var countInterval = setInterval(() => {
+    //     con.query("SELECT COUNT(*) FROM emails", function (err, result) {
+    //         if (err) throw err;
+    //         pulledEmails = result[0]['COUNT(*)'];
+    //     });
+    // }, 300000)
 }
 
 const timer = ms => new Promise(res => setTimeout(res, ms))
