@@ -124,8 +124,12 @@ async function addEmailToDB(email_id, contact_id, subject, headers, plain_conten
     if (sent_date != null) sent_date = '"' + sent_date.replaceAll("\"", "") + '"';
     if (received_date != null) received_date = '"' + received_date.replaceAll("\"", "") + '"';
 
-    con.query(`INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date, sent_to_cc_addresses) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date}, ${sent_to_cc_addresses})`, function (err, result) {
-        if (err) console.log(err);
-    });
+    var query = `INSERT INTO emails (email_id, contact_id, subject, headers, plain_content, html_content, sent_to_address, sent_from_address, sent_date, received_date, sent_to_cc_addresses) VALUES (${email_id}, ${contact_id}, ${subject}, ${headers}, ${plain_content}, ${html_content}, ${sent_to_address}, ${sent_from_address}, ${sent_date}, ${received_date}, ${sent_to_cc_addresses})`;
+
+    console.log(query);
+
+    // con.query(query, function (err, result) {
+    //     if (err) console.log(err);
+    // });
     console.log("Added email id: " + email_id);
 }
