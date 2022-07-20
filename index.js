@@ -70,10 +70,14 @@ async function mainloop() {
     console.log("Running...");
     var i = newestFetchedEmailId + 2
     var mainInterval = setInterval(() => {
-        if (!running || i > lastEmailInJuneID) clearInterval(mainInterval);
+        if (!running || i > lastEmailInJuneID) {
+            console.log("DONE");
+            clearInterval(mainInterval);
+        }
         getKeapEmail(i).then((thisEmail) => {
             if (thisEmail && thisEmail != null && !thisEmail.message && !thisEmail.fault) {
-                addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_to_cc_addresses, thisEmail.sent_date, thisEmail.received_date);
+                if(thisEmail.contact_id != 0) addEmailToDB(thisEmail.id, thisEmail.contact_id, thisEmail.subject, thisEmail.headers, thisEmail.plain_content, thisEmail.html_content, thisEmail.sent_to_address, thisEmail.sent_from_address, thisEmail.sent_to_cc_addresses, thisEmail.sent_date, thisEmail.received_date);
+                else console.log("Zero contact id for email " + thisEmail.id)
             } else if (thisEmail.message) {
                 i -= 1;
             }
