@@ -17,7 +17,8 @@ var running = true;
 var pulledEmails = 0;
 
 // Last email in june has id 3354568
-var lastEmailInJuneID = 3354568;
+
+var goUntilID = 4091966; // NGL this is some random ass email on November 16th
 
 const con = mysql.createConnection({
     host: "keap-emails-aurora.cluster-c68hykezydet.us-west-1.rds.amazonaws.com",
@@ -78,7 +79,7 @@ async function mainloop() {
     console.log("Running...");
     var i = newestFetchedEmailId + 2;
     var mainInterval = setInterval(() => {
-        if (!running || i > lastEmailInJuneID) {
+        if (!running || i > goUntilID) {
             console.log("DONE");
             clearInterval(mainInterval);
         }
