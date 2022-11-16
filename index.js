@@ -49,7 +49,7 @@ app.get("/login", (req, res) => {
 app.get("/stop", (req, res) => {
     running = false;
     console.log("TERMINATED");
-    res.send("Stoppin");
+    res.send("Stopping");
 });
 
 con.connect(function(err) {
