@@ -20,7 +20,7 @@ var pulledEmails = 0;
 var lastEmailInJuneID = 3354568;
 
 const con = mysql.createConnection({
-    host: "keap-emails.c68hykezydet.us-west-1.rds.amazonaws.com",
+    host: "keap-emails-aurora.cluster-c68hykezydet.us-west-1.rds.amazonaws.com",
     user: "admin",
     password: "n33l3ylaw!",
     database: "sys",
