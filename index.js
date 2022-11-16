@@ -23,7 +23,7 @@ const con = mysql.createConnection({
     host: "keap-emails-aurora.cluster-c68hykezydet.us-west-1.rds.amazonaws.com",
     user: "admin",
     password: "n33l3ylaw!",
-    database: "sys",
+    database: "main",
 });
 
 app.get("/", (req, res) => {
