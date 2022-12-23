@@ -18,7 +18,7 @@ var pulledEmails = 0;
 
 // Last email in june has id 3354568
 
-var goUntilID = 4221761; // NGL this is some random ass email on December 13th
+var goUntilID = 4255813; // NGL this is some random ass email on December 23rd
 
 const con = mysql.createConnection({
     host: "keap-emails-aurora.cluster-c68hykezydet.us-west-1.rds.amazonaws.com",
